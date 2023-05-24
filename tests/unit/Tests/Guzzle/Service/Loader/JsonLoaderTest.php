@@ -3,16 +3,16 @@
 namespace Tests\Guzzle\Service\Loader;
 
 use Guzzle\Service\Loader\JsonLoader;
-
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\FileLocator;
 
-class JsonLoaderTest extends \PHPUnit_Framework_TestCase
+class JsonLoaderTest extends TestCase
 {
     protected $jsonLoader;
 
     protected $locator;
 
-    public function setUp()
+    public function setUp(): void
     {
         $configDirectories = array(FIXTURES_PATH);
         $this->locator = new FileLocator($configDirectories);
@@ -31,11 +31,10 @@ class JsonLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('certificates.get', $values['operations'], 'recursive imports failed');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testFileNotFound()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $configDirectories = array(FIXTURES_PATH);
         $locator = new FileLocator($configDirectories);
 
@@ -43,11 +42,10 @@ class JsonLoaderTest extends \PHPUnit_Framework_TestCase
         $jsonLoader->load($locator->locate('notFound.json'));
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testInvalid()
     {
+        $this->expectException(\Exception::class);
+
         $configDirectories = array(FIXTURES_PATH);
         $locator = new FileLocator($configDirectories);
 

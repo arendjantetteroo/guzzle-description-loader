@@ -2,27 +2,28 @@
 
 namespace Tests\Guzzle\Service\Loader;
 
-use Guzzle\Service\Loader\PhpLoader;
-
+use Guzzle\Service\Loader\YamlLoader;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Yaml\Exception\ParseException;
 
-class PhpLoaderTest extends \PHPUnit_Framework_TestCase
+class YamlLoaderTest extends TestCase
 {
-    protected $PhpLoader;
+    protected $YamlLoader;
 
     protected $locator;
 
-    public function setUp()
+    public function setUp(): void
     {
         $configDirectories = array(FIXTURES_PATH);
         $this->locator = new FileLocator($configDirectories);
 
-        $this->PhpLoader = new PhpLoader($this->locator);
+        $this->YamlLoader = new YamlLoader($this->locator);
     }
 
     public function testLoad()
     {
-        $values = $this->PhpLoader->load($this->locator->locate('description.php'));
+        $values = $this->YamlLoader->load($this->locator->locate('description.yml'));
 
         $this->assertArrayHasKey('operations', $values);
         $this->assertArrayHasKey('models', $values);
@@ -31,15 +32,25 @@ class PhpLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('certificates.delete', $values['operations'], 'recursive imports failed');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testFileNotFound()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $configDirectories = array(FIXTURES_PATH);
         $locator = new FileLocator($configDirectories);
 
-        $PhpLoader = new PhpLoader($locator);
-        $PhpLoader->load($locator->locate('notFound.php'));
+        $YamlLoader = new YamlLoader($locator);
+        $YamlLoader->load($locator->locate('notFound.yml'));
+    }
+
+    public function testInvalid()
+    {
+        $this->expectException(ParseException::class);
+
+        $configDirectories = array(FIXTURES_PATH);
+        $locator = new FileLocator($configDirectories);
+
+        $YamlLoader = new YamlLoader($locator);
+        $YamlLoader->load($locator->locate('invalid.yml'));
     }
 }

@@ -1,16 +1,14 @@
-[![Build Status](https://secure.travis-ci.org/gimler/guzzle-description-loader.png?branch=master)](http://travis-ci.org/gimler/guzzle-description-loader)
-[![Dependency Status](https://www.versioneye.com/user/projects/55f17b93d4d204001e000053/badge.png)](https://www.versioneye.com/user/projects/55f17b93d4d204001e000053)
-
 # Guzzle Service Description Loader
 
-A stand-alone Service Description loader for Guzzle 5.x.
+A stand-alone Service Description loader for Guzzle with compatibility for
+Symfony 4.x, 5.x, and 6.x.
 
 ## Installation
 
 If you are using Composer, and you should, just run the following command:
 
 ``` sh
-composer require "gimler/guzzle-description-loader"
+composer require "inveniem/guzzle-description-loader"
 ```
 
 ## Supported File Formats
