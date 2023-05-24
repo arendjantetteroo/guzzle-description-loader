@@ -2,27 +2,27 @@
 
 namespace Tests\Guzzle\Service\Loader;
 
-use Guzzle\Service\Loader\YamlLoader;
-
+use Guzzle\Service\Loader\PhpLoader;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\FileLocator;
 
-class YamlLoaderTest extends \PHPUnit_Framework_TestCase
+class PhpLoaderTest extends TestCase
 {
-    protected $YamlLoader;
+    protected $PhpLoader;
 
     protected $locator;
 
-    public function setUp()
+    public function setUp(): void
     {
         $configDirectories = array(FIXTURES_PATH);
         $this->locator = new FileLocator($configDirectories);
 
-        $this->YamlLoader = new YamlLoader($this->locator);
+        $this->PhpLoader = new PhpLoader($this->locator);
     }
 
     public function testLoad()
     {
-        $values = $this->YamlLoader->load($this->locator->locate('description.yml'));
+        $values = $this->PhpLoader->load($this->locator->locate('description.php'));
 
         $this->assertArrayHasKey('operations', $values);
         $this->assertArrayHasKey('models', $values);
@@ -31,27 +31,14 @@ class YamlLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('certificates.delete', $values['operations'], 'recursive imports failed');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testFileNotFound()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $configDirectories = array(FIXTURES_PATH);
         $locator = new FileLocator($configDirectories);
 
-        $YamlLoader = new YamlLoader($locator);
-        $YamlLoader->load($locator->locate('notFound.yml'));
-    }
-
-    /**
-     * @expectedException \Symfony\Component\Yaml\Exception\ParseException
-     */
-    public function testInvalid()
-    {
-        $configDirectories = array(FIXTURES_PATH);
-        $locator = new FileLocator($configDirectories);
-
-        $YamlLoader = new YamlLoader($locator);
-        $YamlLoader->load($locator->locate('invalid.yml'));
+        $PhpLoader = new PhpLoader($locator);
+        $PhpLoader->load($locator->locate('notFound.php'));
     }
 }
