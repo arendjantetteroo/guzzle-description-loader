@@ -3,12 +3,6 @@ operations:
         httpMethod: "POST"
         uri: "services/storageservices"
         description: "The Create Storage Account asynchronous operation creates a new storage account in Microsoft Azure."
-        data:
-            xmlEncoding: "utf-8"
-            xmlRoot:
-                name: "CreateStorageServiceInput"
-                namespaces:
-                    - "http://schemas.microsoft.com/windowsazure"
         parameters:
             name:
                 type: "string"
